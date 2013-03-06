@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="${lang}">
+    <head>
+        <title>#{get 'title' /}</title>
+        <meta charset="${_response_encoding}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/bootstrap.min.css'}">
+        <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/bootstrap-responsive.min.css'}">
+    </head>
+    <body id="crud">
+
+        <div id="crudHeader">
+            <h1><a href="@{CRUD.index()}">&{'crud.title'}</a></h1>
+        </div>
+
+#{if request.actionMethod != 'index'}
+            <div id="crudBreadcrumb">
+                #{crud.navigation /}
+            </div>
+#{/if}
+
+#{if flash.success}
+            <div class="crudFlash flashSuccess">
+                ${flash.success}
+            </div>
+#{/if}
+#{if flash.error || error}
+            <div class="crudFlash flashError">
+                ${error ?: flash.error}
+            </div>
+#{/if}
+
+        <div id="crudContent">
+        #{doLayout /}
+        </div>
+
+        <div id="crudFooter">
+            
+        </div>
+        
+    </body>
+</html>
+<script src="@{'/public/javascripts/jquery-1.9.1.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+<script src="@{'/public/javascripts/bootstrap.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>

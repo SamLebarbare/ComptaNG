@@ -1,0 +1,53 @@
+#{extends 'main.html' /}
+#{set title:'Journal' /}
+
+<form class="form-inline">
+  <input type="text" data-provide="typeahead" placeholder="Compte débité">
+  <input type="text" data-provide="typeahead" placeholder="Compte crédité">
+  <input type="text" placeholder="Libellé">
+  <br>
+  <input type="text" data-provide="typeahead" placeholder="Somme Débit">
+  <input type="text" data-provide="typeahead" placeholder="Somme Crédit">
+  <button type="submit" class="btn btn-success">valider</button>
+</form>
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td>${logBook.accounting} / ${logBook.entries.size()} ligne(s)</td>
+        </tr>
+        <tr>
+            <td>N°</td>
+            <td>Compte débité</td>
+            <td>Compte crédité</td>
+            <td>Libellé</td>
+            <td>Somme Débit</td>
+            <td>Somme Crédit</td>       
+        </tr>
+    </thead>
+    <tbody>
+    #{list items:logBook.entries,as:'e'}
+    <tr>
+        <td>
+            ${e_index}
+        </td>
+        <td>
+            ${e.debitedAccount.title}
+        </td>
+        <td>
+            ${e.creditedAccount.title}
+        </td>
+        <td>
+            ${e.label}
+        </td>
+        <td>
+            ${e.debitedAmount}
+        </td>
+        <td>
+            ${e.creditedAmount}
+        </td>
+    </tr>
+    #{/list}
+</tbody>
+</table>

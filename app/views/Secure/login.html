@@ -1,0 +1,22 @@
+#{extends 'Secure/layout.html' /}
+    
+    #{form @authenticate(),class:'form-signin'}
+    <h2 class="form-signin-heading">Please sign in</h2>
+    #{if flash.error}
+    <p class="error">
+        &{flash.error}
+    </p>
+    #{/if}
+    #{if flash.success}
+    <p class="success">
+        &{flash.success}
+    </p>
+    #{/if}
+
+    <input type="text" class="input-block-level" name="username" id="username" value="${flash.username}" placeholder="Email address" />
+    <input type="password" class="input-block-level" name="password" id="password" value="" placeholder="Email address" />
+    <label class="checkbox" for="remember">&{'secure.remember'}</label>
+    <input type="checkbox" name="remember" id="remember" value="true" ${flash.remember ? 'checked="true"' : ''} />
+    <button class="btn btn-large btn-primary" type="submit" value="&{'secure.signin'}">Sign in</button>
+    #{/form}
+

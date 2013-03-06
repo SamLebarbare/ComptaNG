@@ -1,0 +1,19 @@
+# IDE and editors
+*~
+.idea
+nbproject
+eclipse
+.amateras
+.settings
+.classpath
+.project
+*.iml
+*.ipr
+*.iws
+
+# Play
+*.pid
+logs
+lib
+tmp
+modules
