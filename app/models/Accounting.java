@@ -20,7 +20,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import play.db.jpa.Model;
 
 @Entity
@@ -30,10 +29,10 @@ public class Accounting extends Model{
     public Date periodTo;
 
     @OneToMany(mappedBy="accounting")
-    List<Account> accounts;
+    public List<Account> accounts;
     
-    @OneToOne(mappedBy="accounting")
-    public LogBook logBook;
+    @OneToMany(mappedBy="accounting")
+    public List<LogBook> logBook;
     
     
     @Override
@@ -42,8 +41,6 @@ public class Accounting extends Model{
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.setTime(this.periodFrom);
         int from = calendar.get(Calendar.YEAR);
-        calendar.setTime(this.periodTo);
-        int to = calendar.get(Calendar.YEAR);
-        return "Plan comptable " + from + " " + to;
+        return "Plan comptable " + from;
     }
 }

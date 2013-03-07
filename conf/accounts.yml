@@ -1,0 +1,66 @@
+## YAML Accounts Template.
+Accounting(acc):
+  periodFrom: 01.01.2013
+  periodTo: 31.12.2013
+  
+LogBook(lb):
+  name: default
+  accounting: acc
+  
+User(u):
+  isAdmin: true
+  login: admin
+  password: admin
+  userCurrentLogBook: lb
+
+Account(1):
+    title: Caisse
+    classification: 1000
+    accounting: acc
+    
+Account(2):
+    title: Compte Poste
+    classification: 1010
+    accounting: acc
+
+Account(3):
+    title: Stock de marchandise A
+    classification: 1200
+    accounting: acc
+
+Account(4):
+    title: Charges payées d'avance
+    classification: 1300
+    accounting: acc
+    
+Account(5):
+   title: Machines et appareils
+   classification: 1500
+   accounting: acc
+   
+Account(6):
+   title: Dettes c/achats de matières et marchandises
+   classification: 2000
+   accounting: acc   
+   
+Account(7):
+   title: Acomptes de clients
+   classification: 2030
+   accounting: acc   
+   
+Account(8):
+   title: Dettes bancaires à court terme
+   classification: 2100
+   accounting: acc      
+
+Account(9):
+   title: Hypothèque à rembourser
+   classification: 2180
+   accounting: acc  
+   
+Account(10):
+   title: Charges à payer
+   classification: 2300
+   accounting: acc    
+   
+   

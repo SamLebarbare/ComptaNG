@@ -9,9 +9,13 @@
         <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/bootstrap-responsive.min.css'}">
     </head>
     <body id="crud">
-
+        <div class="container">
+            
+            
+        
         <div id="crudHeader">
-            <h1><a href="@{CRUD.index()}">&{'crud.title'}</a></h1>
+            <img src="http://www.epsitec.ch/images/epsitec1.jpg" />
+            <h1><a href="@{CRUD.index()}">&{'crud.title'}</a> / <a href="@{Application.index()}">Compta NG</a></h1>
         </div>
 
 #{if request.actionMethod != 'index'}
@@ -38,8 +42,8 @@
         <div id="crudFooter">
             
         </div>
-        
+    </div>    
+    <script src="@{'/public/javascripts/jquery-1.9.1.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+    <script src="@{'/public/javascripts/bootstrap.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>    
     </body>
 </html>
-<script src="@{'/public/javascripts/jquery-1.9.1.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
-<script src="@{'/public/javascripts/bootstrap.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>

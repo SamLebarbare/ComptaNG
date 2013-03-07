@@ -11,18 +11,39 @@
  * limitations under the License.
  *
  */
-
 package controllers;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import play.mvc.*;
 import models.*;
+import values.AutoCompleteValue;
 
 @With(Secure.class)
-public class API extends Controller{
+public class API extends Controller {
 
     
-    public static void newLogBookEntry(Long debAccountId,Long creAccountId,String label,int debAmount,int creAmount)
-    {
+    //AUTOCOMPLETER
+    public static void autocompleteAccount(final String term) {
         
+        final List<AutoCompleteValue> response = new ArrayList<AutoCompleteValue>();
+        
+        String that = term.toUpperCase() + "%";
+        List<Account> accounts = Account.find("UPPER(title) like ?",that).fetch();
+        
+        
+        //Try by classification
+        if(accounts.isEmpty()&&term.matches("\\d+"))
+        {
+            accounts = Account.find("classification like ?",that).fetch();
+        }
+        
+        for (Account a : accounts)
+        {
+            response.add(new AutoCompleteValue(a.id.toString(), a.title + "(" + a.classification + ")" ));
+        }
+   
+        renderJSON(response);
     }
 }

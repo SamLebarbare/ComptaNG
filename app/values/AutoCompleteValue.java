@@ -11,31 +11,15 @@
  * limitations under the License.
  *
  */
+package values;
 
-package models;
+public class AutoCompleteValue {
 
-import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import play.db.jpa.Model;
+    private String value;
+    private String label;
 
-@Entity
-public class LogBook extends Model{
-    
-    public String name;
-    @OneToMany(mappedBy="logBook")
-    public List<LogBookEntry> entries;
-    
-    @OneToOne
-    public Accounting accounting;
-    
-    @OneToMany(mappedBy="userCurrentLogBook")
-    public List<User> usersWorkingOn;
-    
-    @Override
-    public String toString()
-    {
-        return this.name;
+    public AutoCompleteValue(final String value, final String label) {
+        this.value = value;
+        this.label = label;
     }
 }

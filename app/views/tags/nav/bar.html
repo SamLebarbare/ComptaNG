@@ -4,16 +4,16 @@
         <div class="navbar-inner">
             <div class="container">
                 <ul class="nav">
-                    <li><a href="#">Ma Compta</a></li>
+                    <li><a href="@{Application.my()}">Ma Compta</a></li>
                     <li><a href="@{Application.journal()}">Journal</a></li>
-                    <li><a href="#">Comptes</a></li>
+                    <li><a href="@{Application.accounts()}">Comptes</a></li>
                     <li><a href="#">Analyses</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">${user} <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">${_u} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Mes tâches</a></li>
-                            <li><a href="#">Mes notes</a></li>
-                            <li class="divider"></li>
+                            #{secure.check 'admin'}
+                            <li><a href="@{CRUD.index()}">Administration</a></li>
+                            #{/secure.check}
                             <li><a href="@{Secure.logout()}">Se déconnecter</a></li>
                         </ul>
                     </li>

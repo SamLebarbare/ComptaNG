@@ -18,6 +18,7 @@ import java.util.GregorianCalendar;
 import models.*;
 import play.jobs.Job;
 import play.jobs.OnApplicationStart;
+import play.test.Fixtures;
 
 
 @OnApplicationStart
@@ -31,7 +32,9 @@ public class Bootstrap extends Job<Void> {
 
             System.out.println("Initial Setup");
             
-            Accounting setupAccounting = new Accounting();
+            Fixtures.loadModels("accounts.yml");
+            
+            /*Accounting setupAccounting = new Accounting();
             setupAccounting.periodFrom = new Date();
             
             Calendar calendar = GregorianCalendar.getInstance();
@@ -52,7 +55,7 @@ public class Bootstrap extends Job<Void> {
             admin.login = "admin";
             admin.password = "admin";
             admin.userCurrentLogBook = setupLogBook;
-            admin.save();
+            admin.save();*/
             
         }
 

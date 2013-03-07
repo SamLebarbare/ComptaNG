@@ -1,0 +1,51 @@
+#{extends 'main.html' /}
+#{set title:'Comptes' /}
+
+
+
+#{list items:accounts,as:'a'}
+<div class="row">
+    <h6>${a.classification} ${a.title}</h6>
+    <div class="span4">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Débit</td>
+                </tr>
+            </thead>
+            <tbody>
+                #{list a.debitLogBookEntries,as:'d'}
+                <tr>
+                    <td>${d.debitedAmount}</td>
+                </tr>
+                #{/list}
+                <tr>
+                    <td></td>
+                </tr>
+            </tbody>
+
+        </table>
+        </div>
+        <div class="span4">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <td>Crédit</td>     
+                    </tr>
+                </thead>
+                <tbody>
+                    #{list items:a.creditLogBookEntries,as:'c'}
+                    <tr>
+                        <td>${c.creditedAmount}</td>
+                    </tr>
+                    #{/list}
+                    <tr>
+                        <td></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>    
+
+#{/list}

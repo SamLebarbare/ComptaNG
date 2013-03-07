@@ -1,24 +1,30 @@
 #{extends 'main.html' /}
 #{set title:'Journal' /}
 
-<form class="form-inline">
-  <input type="text" data-provide="typeahead" placeholder="Compte débité">
-  <input type="text" data-provide="typeahead" placeholder="Compte crédité">
-  <input type="text" placeholder="Libellé">
-  <br>
-  <input type="text" data-provide="typeahead" placeholder="Somme Débit">
-  <input type="text" data-provide="typeahead" placeholder="Somme Crédit">
-  <button type="submit" class="btn btn-success">valider</button>
-</form>
-
+<h1>Journal 
+    <div class="btn-group">
+        <button class="btn btn-large dropdown-toggle" data-toggle="dropdown">${logBook.name} <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            #{list items:availableLogBook,as:'l'}
+            <li><a href="@{Application.changeLogBook(l.id)}">${l.name}</a></li>
+            #{/list}
+        </ul>
+    </div>
+</h1>
+<h3>${logBook.accounting}</h3>
+#{form @Application.newLogBookEntry(),method:'POST',class:'form-inline'}
+<input name="debAccountId" type="text" class="autocomplete-relation" data-url="@{API.autocompleteAccount()}" placeholder="Compte débité">
+<input name="creAccountId" type="text" class="autocomplete-relation" data-url="@{API.autocompleteAccount()}" placeholder="Compte crédité">
+<input name="label" type="text" placeholder="Libellé">
+<input name="amount" type="text" data-provide="typeahead" placeholder="Montant">
+<button type="submit" class="btn btn-success">valider</button>
+#{/form}
 
 <table class="table table-bordered">
     <thead>
         <tr>
-            <td>${logBook.accounting} / ${logBook.entries.size()} ligne(s)</td>
-        </tr>
-        <tr>
             <td>N°</td>
+            <td>Enregistré le</td>
             <td>Compte débité</td>
             <td>Compte crédité</td>
             <td>Libellé</td>
@@ -27,27 +33,128 @@
         </tr>
     </thead>
     <tbody>
-    #{list items:logBook.entries,as:'e'}
-    <tr>
-        <td>
-            ${e_index}
-        </td>
-        <td>
-            ${e.debitedAccount.title}
-        </td>
-        <td>
-            ${e.creditedAccount.title}
-        </td>
-        <td>
-            ${e.label}
-        </td>
-        <td>
-            ${e.debitedAmount}
-        </td>
-        <td>
-            ${e.creditedAmount}
-        </td>
-    </tr>
-    #{/list}
-</tbody>
+        %{
+        cTotal = 0;
+        dTotal = 0;
+        }%
+        #{list items:logBook.entries,as:'e'}
+        <tr>
+            <td>
+                ${e_index}
+            </td>
+            <td>
+                ${e.loggedAt.format("dd.MM","fr")}
+            </td>
+            <td>
+                ${e.debitedAccount.title}
+            </td>
+            <td>
+                ${e.creditedAccount.title}
+            </td>
+            <td>
+                ${e.label}
+            </td>
+            <td>
+                ${e.debitedAmount}
+                %{ dTotal += e.debitedAmount %}
+            </td>
+            <td>
+                ${e.creditedAmount}
+                %{ cTotal += e.creditedAmount %}
+            </td>
+        </tr>
+        #{/list}
+        <tr>
+            <td>${logBook.entries.size()} ligne(s)</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>${dTotal}</td>
+            <td>${cTotal}</td>
+        </tr>
+    </tbody>
 </table>
+
+
+<div id="newMessage">
+    <input type="text" id="message" autocomplete="off">
+    <button id="send" type="submit" class="btn btn-success">envoyer</button>
+</div>
+
+
+
+
+<script src="@{'/public/javascripts/jquery-ui-1.10.1.custom.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+<script>
+    $('input.autocomplete-relation').each(function() {
+        var $input = $(this);
+
+        // Create a hidden input with the same form control name to submit the value.
+        var controlName = $input.attr('name');
+        var $hidden = $('<input type="hidden"/>').attr('name', controlName);
+        $input.after($hidden).attr('name', controlName + '_label');
+
+        // Set-up the autocomplete widget.
+        var serverUrl = $input.data('url');
+        $(this).autocomplete({
+            source: serverUrl,
+            focus: function(event, ui) {
+                // Set the text input value to the focused item's label, instead of the value.
+                $input.val(ui.item.label);
+                return false;
+            },
+            select: function(event, ui) {
+                // Save the selection item and value in the two inputs.
+                $input.val(ui.item.label);
+                $hidden.val(ui.item.value);
+                return false;
+            }
+        });
+    });
+
+    // On form submit, suppress autocomplete fields that only contain a label.
+    $('form').submit(function() {
+        $(this).find('input.autocomplete-relation').attr('disabled', 'disabled');
+    });
+</script>
+
+
+
+<script type="text/javascript">
+
+    // Create a socket
+    var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
+    var socket = new WS('@@{ApplicationWS.join(user)}')
+
+    // Display a message
+    var display = function(event) {
+        $('#thread').prepend(tmpl('message_tmpl', {event: event}));
+        //$('#thread').scrollTo('max')
+    }
+
+    // Message received on the socket
+    socket.onmessage = function(event) {
+        var parts = /^([^:]+):([^:]+)(:(.*))?$/.exec(event.data)
+        display({
+            type: parts[1],
+            user: parts[2],
+            text: parts[4]
+        })
+    }
+
+    $('#send').click(function(e) {
+        var message = $('#message').val()
+        $('#message').val('')
+        socket.send(message)
+    });
+
+    $('#message').keypress(function(e) {
+        if (e.charCode == 13 || e.keyCode == 13) {
+            $('#send').click()
+            e.preventDefault()
+        }
+    })
+
+</script>
+

@@ -15,5 +15,8 @@ GET     /public/                                staticDir:public
 # Import CRUD routes
 *      /admin                                   module:crud
 
+
+WS   /chat                                      ApplicationWS.join
+
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}

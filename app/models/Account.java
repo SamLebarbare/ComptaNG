@@ -14,8 +14,10 @@
 
 package models;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import play.db.jpa.Model;
 
 @Entity
@@ -28,6 +30,15 @@ public class Account extends Model{
     @ManyToOne
     public Accounting accounting;
     
+    @OneToMany(mappedBy="creditedAccount")
+    public List<LogBookEntry> creditLogBookEntries;
     
+    @OneToMany(mappedBy="debitedAccount")
+    public List<LogBookEntry> debitLogBookEntries;
     
+    @Override
+    public String toString()
+    {
+        return this.title + " (" + this.classification + ")";
+    }
 }
